@@ -20,7 +20,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
   books-service:
     # image: jaimesalvador/app-books:1.0.0
-    build: .
+    # build: .
+    image: cfeliot/app-books:1
     platform: linux/amd64
     environment:
       DB_CONNECTION_USER: postgres
