@@ -29,7 +29,7 @@ services:
       SERVER_PORT: 7001
       AUTHOR_URL: http://proxy/app2
     depends_on:
-      - postgres-sql
+      - authors-service
     deploy:
       replicas: 1
     expose:

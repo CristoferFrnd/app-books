@@ -62,9 +62,9 @@ public class BookRest {
     public List<BookDto> findAllCompleto() {
         var books = bookService.findAll();
 
-        return books.stream()
+        List<BookDto> booksAuthors = books.stream()
                 .map(s -> {
-                    System.out.println("********* buscando " + s.getId() );
+                    System.out.println("********* buscando " + s.getId());
 
                     AuthorsCliente author = proxyAuthor.findById(s.getId().longValue());
                     return new BookDto(
@@ -77,6 +77,12 @@ public class BookRest {
                     );
                 })
                 .collect(Collectors.toList());
+
+        if (booksAuthors.size() == 0) {
+            throw new RuntimeException("No se encontraron libros");
+        }
+
+        return booksAuthors;
     }
 
     @POST
@@ -99,6 +105,18 @@ public class BookRest {
     }
 
     public List<BookDto> findAllFallback() {
-        return Collections.emptyList();
+        // generate list of books with the column auhor as "Unknown"
+        var books = bookService.findAll();
+
+        return books.stream()
+                .map(s -> new BookDto(
+                        s.getId(),
+                        s.getIsbn(),
+                        s.getTitle(),
+                        s.getAuthor(),
+                        s.getPrice(),
+                        "Unknown"
+                ))
+                .toList();
     }
 }
